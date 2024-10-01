@@ -1,1 +1,1 @@
-# Kinght-Platformer
+# Cube-Boy-2D-platformer
