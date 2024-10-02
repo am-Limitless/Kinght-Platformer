@@ -5,6 +5,7 @@ public class Obstacles : MonoBehaviour
 {
     private Vector2 startPos;
     private Rigidbody2D rb;
+    private Animator _animator;
 
     [SerializeField] private AudioClip _gameOverSound;
     [SerializeField] private AudioSource _gameOverSoundSource;
@@ -13,12 +14,14 @@ public class Obstacles : MonoBehaviour
     {
         startPos = transform.position;
         rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Obstacle"))
         {
+            _animator.SetInteger("playerState", 3);
             Die();
             PlayGameOverSound();
         }
@@ -26,7 +29,7 @@ public class Obstacles : MonoBehaviour
 
     private void Die()
     {
-        StartCoroutine(Respawn(0.5f));
+        StartCoroutine(Respawn(0.8f));
     }
 
     IEnumerator Respawn(float duration)
