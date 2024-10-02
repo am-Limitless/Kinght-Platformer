@@ -10,9 +10,8 @@ public class Ground : MonoBehaviour
     //private PhysicsMaterial2D _material;
 
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField, Range(0f, 90f)] private float maxGroundAngle = 75f; // Maximum angle considered as "ground"
-    [SerializeField, Range(0.1f, 2f)] private float rayLength = 1.5f; // Length of the raycast for ground detection
-    [SerializeField, Range(0.1f, 1f)] private float raySpacing = 0.5f; // Horizontal spacing between multiple raycasts
+    [SerializeField, Range(0.1f, 2f)] private float rayLength = 1.5f; 
+    [SerializeField, Range(0.1f, 1f)] private float raySpacing = 0.5f; 
 
 
     private void FixedUpdate()
