@@ -7,7 +7,7 @@ public class Jump : MonoBehaviour
     [SerializeField] private InputController _input = null;
     [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
     [SerializeField, Range(0, 5)] private int _maxAirJumps = 1;
-    [SerializeField] private int _jumpsLeft;
+    private int _jumpsLeft;
 
     [Header("Gravity Settings")]
     [SerializeField, Range(0f, 5f)] private float _downwardMovementMultiplier = 3f;
@@ -52,10 +52,7 @@ public class Jump : MonoBehaviour
     private void Update()
     {
         _desiredJump |= _input.RetriveJumpInput();
-        if (_desiredJump)
-        {
-            Debug.Log("Jump button pressed.");
-        }
+
     }
 
     private void FixedUpdate()
@@ -64,7 +61,7 @@ public class Jump : MonoBehaviour
 
         _velocity = _body.velocity;
 
-        if (_onGround && _body.velocity.y == 0)
+        if (_onGround)
         {
             ResetJumpState();
         }
@@ -95,7 +92,7 @@ public class Jump : MonoBehaviour
 
     private void JumpAction()
     {
-        if (_coyoteCounter > 0f || _jumpPhase < _maxAirJumps)
+        if (_jumpsLeft > 0)
         {
             _jumpPhase++;
             _jumpsLeft--;
@@ -105,6 +102,11 @@ public class Jump : MonoBehaviour
             _isJumping = true;
             _velocity.y = _jumpSpeed;
             PlayJumpSound();
+            Debug.Log($"Jump executed! Jump Phase: {_jumpPhase}, Jumps Left: {_jumpsLeft}, IsJumping: {_isJumping}, On Ground: {_onGround}");
+        }
+        else
+        {
+            Debug.Log("No jumps left.");
         }
     }
 
@@ -133,10 +135,9 @@ public class Jump : MonoBehaviour
 
     private void ResetJumpState()
     {
-        _jumpsLeft = _maxAirJumps + 1; // Reset total jumps (initial jump + air jumps)
-        _jumpPhase = 0; // Reset jump phase
-        _coyoteCounter = _coyoteTime; // Reset coyote time
-        _isJumping = false; // Not in jump state
-        Debug.Log("Grounded! Jump state reset. Jumps Left: " + _jumpsLeft);
+        _jumpsLeft = _maxAirJumps + 1;
+        _jumpPhase = 0;
+        _coyoteCounter = _coyoteTime;
+        _isJumping = false;
     }
 }

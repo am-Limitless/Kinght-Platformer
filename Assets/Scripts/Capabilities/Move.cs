@@ -36,7 +36,7 @@ public class Move : MonoBehaviour
     private void Update()
     {
         _direction.x = _input.RetrieveMoveInput();
-        _desiredVelocity = new Vector2(_direction.x, 0f) * Mathf.Max(_maxSpeed - _ground.GetFriction(), 0f);
+        _desiredVelocity = new Vector2(_direction.x, 0f) * Mathf.Max(_maxSpeed);
 
         // Flip character based on direction
         if (_direction.x > 0)
@@ -68,12 +68,9 @@ public class Move : MonoBehaviour
 
     private void PlayWalkSound()
     {
-        // Add debug logs to see if the method is being called and what the state is
-        Debug.Log("PlayWalkSound called. OnGround: " + _onGround + ", Velocity: " + _velocity.x + ", IsPlaying: " + _walkAudioSource.isPlaying);
 
         if (_onGround && Mathf.Abs(_velocity.x) > 0.1f && !_walkAudioSource.isPlaying)
         {
-            Debug.Log("Starting walk sound.");
             _walkAudioSource.clip = _walkSound;
             _walkAudioSource.loop = true;
             _walkAudioSource.Play();
@@ -82,7 +79,6 @@ public class Move : MonoBehaviour
         {
             if (_walkAudioSource.isPlaying)
             {
-                Debug.Log("Stopping walk sound.");
                 _walkAudioSource.Stop();
             }
         }

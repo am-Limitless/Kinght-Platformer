@@ -7,7 +7,7 @@ public class Ground : MonoBehaviour
     private float _groundAngle;
     private bool groundDetected;
 
-    private PhysicsMaterial2D _material;
+    //private PhysicsMaterial2D _material;
 
     [SerializeField] private LayerMask groundLayer;
     [SerializeField, Range(0f, 90f)] private float maxGroundAngle = 75f; // Maximum angle considered as "ground"
@@ -37,63 +37,10 @@ public class Ground : MonoBehaviour
         {
             groundDetected = true;
             _onGround = true;
-            Debug.Log("Ground Detected: " + _onGround);
         }
         else
         {
             _onGround = false;
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        EvaluateCollision(collision);
-        RetrieveFriction(collision);
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        EvaluateCollision(collision);
-        RetrieveFriction(collision);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        _onGround = false;
-        _friction = 0;
-    }
-
-    private void EvaluateCollision(Collision2D collision)
-    {
-        // Check if the collision has any contacts
-        if (collision.contactCount > 0 && ((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            foreach (ContactPoint2D contact in collision.contacts)
-            {
-                _groundAngle = Vector2.Angle(contact.normal, Vector2.up);
-
-                // Check if the angle is within the defined threshold to consider it as ground
-                if (_groundAngle <= maxGroundAngle)
-                {
-                    _onGround = true;
-                    return;
-                }
-
-            }
-
-        }
-        _onGround = false;
-    }
-
-    private void RetrieveFriction(Collision2D collision)
-    {
-        PhysicsMaterial2D material = collision.rigidbody.sharedMaterial;
-
-        _friction = 0;
-
-        if (material != null)
-        {
-            _friction = material.friction;
         }
     }
 
@@ -102,8 +49,65 @@ public class Ground : MonoBehaviour
         return _onGround;
     }
 
-    public float GetFriction()
-    {
-        return _friction;
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    EvaluateCollision(collision);
+    //    RetrieveFriction(collision);
+    //}
+
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    EvaluateCollision(collision);
+    //    RetrieveFriction(collision);
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    _onGround = false;
+    //    _friction = 0;
+    //}
+
+    //private void EvaluateCollision(Collision2D collision)
+    //{
+    //    // Check if the collision has any contacts
+    //    if (collision.contactCount > 0 && ((1 << collision.gameObject.layer) & groundLayer) != 0)
+    //    {
+    //        foreach (ContactPoint2D contact in collision.contacts)
+    //        {
+    //            _groundAngle = Vector2.Angle(contact.normal, Vector2.up);
+
+    //            // Check if the angle is within the defined threshold to consider it as ground
+    //            if (_groundAngle <= maxGroundAngle)
+    //            {
+    //                _onGround = true;
+    //                return;
+    //            }
+
+    //        }
+
+    //    }
+    //    _onGround = false;
+    //}
+
+    //private void RetrieveFriction(Collision2D collision)
+    //{
+    //    PhysicsMaterial2D material = collision.rigidbody.sharedMaterial;
+
+    //    _friction = 0;
+
+    //    if (material != null)
+    //    {
+    //        _friction = material.friction;
+    //    }
+    //}
+
+    //public bool GetOnGround()
+    //{
+    //    return _onGround;
+    //}
+
+    //public float GetFriction()
+    //{
+    //    return _friction;
+    //}
 }
