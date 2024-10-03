@@ -1250,7 +1250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 012e4bf12cd2ede42a7646bd5588379b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instuct1: {fileID: 560876151}
+  instruct: {fileID: 560876151}
 --- !u!1001 &484880676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24547,7 +24547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43fdaa795b233b543a3cef1c58986a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instuct: {fileID: 2030121125}
+  instruct: {fileID: 0}
   winTrigger: 0
 --- !u!1 &2040591659
 GameObject:

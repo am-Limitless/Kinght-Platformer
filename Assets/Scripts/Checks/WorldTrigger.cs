@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class WorldTrigger : MonoBehaviour
 {
-    public GameObject instuct1;
+    public GameObject instruct;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            instuct1.SetActive(true);
+            instruct.SetActive(true);
         }
     }
 
@@ -16,7 +16,7 @@ public class WorldTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            instuct1.SetActive(false);
+            instruct.SetActive(false);
         }
     }
 }

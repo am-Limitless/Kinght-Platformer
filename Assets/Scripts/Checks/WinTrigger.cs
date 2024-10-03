@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WinTrigger : MonoBehaviour
 {
-    public GameObject instuct;
+    public GameObject instruct;
 
     public bool winTrigger = false;
 
@@ -10,7 +10,7 @@ public class WinTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            instuct.SetActive(true);
+            instruct.SetActive(true);
             winTrigger = true;
         }
     }
@@ -19,7 +19,7 @@ public class WinTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            instuct.SetActive(false);
+            instruct.SetActive(false);
         }
     }
 }

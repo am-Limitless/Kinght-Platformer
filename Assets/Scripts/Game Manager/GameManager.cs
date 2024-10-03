@@ -8,13 +8,6 @@ public class GameManager : MonoBehaviour
     public WinTrigger winTriggerScript;
 
 
-    private void Update()
-    {
-        if (winTriggerScript.winTrigger)
-        {
-            WinMenu();
-        }
-    }
 
 
     public void Quit()
