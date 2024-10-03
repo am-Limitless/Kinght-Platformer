@@ -42,12 +42,12 @@ public class Move : MonoBehaviour
         if (_direction.x > 0)
         {
             // Move right
-            transform.localScale = new Vector3(-1f, 1f, 1f); // Face right
+            transform.localScale = new Vector3(1f, 1f, 1f); // Face right
         }
         else if (_direction.x < 0)
         {
             // Move left
-            transform.localScale = new Vector3(1f, 1f, 1f); // Face left
+            transform.localScale = new Vector3(-1f, 1f, 1f); // Face left
         }
         PlayWalkSound();
     }
