@@ -40,7 +40,6 @@ public class Jump : MonoBehaviour
         ResetJumpState();
     }
 
-
     private void Awake()
     {
         _body = GetComponent<Rigidbody2D>();
@@ -52,7 +51,6 @@ public class Jump : MonoBehaviour
     private void Update()
     {
         _desiredJump |= _input.RetriveJumpInput();
-
     }
 
     private void FixedUpdate()
@@ -61,6 +59,17 @@ public class Jump : MonoBehaviour
 
         _velocity = _body.velocity;
 
+        ResetOnGround();
+
+        HandleJumpInput();
+
+        AdjustGravityScale();
+
+        _body.velocity = _velocity;
+    }
+
+    private void ResetOnGround()
+    {
         if (_onGround)
         {
             ResetJumpState();
@@ -69,55 +78,62 @@ public class Jump : MonoBehaviour
         {
             _coyoteCounter -= Time.deltaTime;
         }
+    }
 
+    private void HandleJumpInput()
+    {
+        // Manage jump buffering and coyote time for jump actions
         if (_desiredJump)
         {
             _desiredJump = false;
-            _jumpBufferCounter += _jumpBufferTime;
+            _jumpBufferCounter = _jumpBufferTime;
         }
-        else if (!_desiredJump && _jumpBufferCounter > 0)
+        else if (_jumpBufferCounter > 0)
         {
             _jumpBufferCounter -= Time.deltaTime;
         }
 
+        // Execute jump if conditions are met
         if (_jumpBufferCounter > 0 && (_coyoteCounter > 0f || _jumpPhase < _maxAirJumps))
         {
-            JumpAction();
+            ExecuteJump();
         }
-
-        AdjustGravityScale();
-
-        _body.velocity = _velocity;
     }
 
-    private void JumpAction()
+    private void ExecuteJump()
     {
-        if (_jumpsLeft > 0)
+        if (_jumpsLeft < 0)
+        {
+            return;
+        }
+        else
         {
             _jumpPhase++;
             _jumpsLeft--;
             _jumpBufferCounter = 0;
             _coyoteCounter = 0;
+
             _jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * _jumpHeight);
-            _isJumping = true;
             _velocity.y = _jumpSpeed;
+
+            _isJumping = true;
             PlayJumpSound();
-            Debug.Log($"Jump executed! Jump Phase: {_jumpPhase}, Jumps Left: {_jumpsLeft}, IsJumping: {_isJumping}, On Ground: {_onGround}");
         }
-        else
-        {
-            Debug.Log("No jumps left.");
-        }
+
     }
 
     private void PlayJumpSound()
     {
-        _jumpAudioSource.PlayOneShot(_jumpSound);
+        if (_jumpSound != null && _jumpAudioSource != null)
+        {
+            _jumpAudioSource.PlayOneShot(_jumpSound);
+        }
     }
 
 
     private void AdjustGravityScale()
     {
+
         // Adjust gravity scale based on the player's vertical velocity and jump hold input
         if (!_input.RetriveJumpHoldInput() && _body.velocity.y > 0)
         {

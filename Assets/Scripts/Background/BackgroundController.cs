@@ -2,29 +2,43 @@ using UnityEngine;
 
 public class BackgroundController : MonoBehaviour
 {
-    private float startPos, length;
+    private float _startPos;
+    private float _length;
+    private SpriteRenderer _spriteRenderer;
+
     public GameObject cam;
     public float parallaxEffect;
 
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     private void Start()
     {
-        startPos = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        _startPos = transform.position.x;
+        _length = _spriteRenderer.bounds.size.x;
     }
-    private void Update()
+
+    private void LateUpdate()
     {
-        float distance = cam.transform.position.x * parallaxEffect;
-        float movement = cam.transform.position.x * (1 - parallaxEffect);
+        float cameraPositionX = cam.transform.position.x;
 
-        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        float distance = cameraPositionX * parallaxEffect;
+        float movement = cameraPositionX * (1 - parallaxEffect);
 
-        if (movement > startPos + length)
+        //transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        Vector3 newPosition = transform.position;
+        newPosition.x = _startPos + distance;
+        transform.position = newPosition;
+
+        if (movement > _startPos + _length)
         {
-            startPos += length;
+            _startPos += _length;
         }
-        else
+        else if (movement < _startPos - _length)
         {
-            startPos -= length;
+            _startPos -= _length;
         }
     }
 }

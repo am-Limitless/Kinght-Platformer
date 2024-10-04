@@ -24,6 +24,11 @@ public class Move : MonoBehaviour
     private float _maxSpeedChange;
     private float _acceleration;
     private bool _onGround;
+    private bool _isPlayingWalkSound;
+
+    private const int ANIMATION_STATE_IDLE = 0;
+    private const int ANIMATION_STATE_RUNNING = 1;
+    private const int ANIMATION_STATE_JUMPING = 2;
 
     private void Awake()
     {
@@ -31,24 +36,30 @@ public class Move : MonoBehaviour
         _ground = GetComponent<Ground>();
         _animator = GetComponent<Animator>();
         _walkAudioSource = GetComponent<AudioSource>();
+
+        _maxSpeedChange = _maxAcceleation * Time.deltaTime;
     }
 
     private void Update()
     {
         _direction.x = _input.RetrieveMoveInput();
-        _desiredVelocity = new Vector2(_direction.x, 0f) * Mathf.Max(_maxSpeed);
+        _desiredVelocity = new Vector2(_direction.x, 0f) * _maxSpeed;
+
+        Vector3 localScale = transform.localScale;
 
         // Flip character based on direction
         if (_direction.x > 0)
         {
             // Move right
-            transform.localScale = new Vector3(1f, 1f, 1f); // Face right
+            localScale.x = 1f; // Face right
         }
         else if (_direction.x < 0)
         {
             // Move left
-            transform.localScale = new Vector3(-1f, 1f, 1f); // Face left
+            localScale.x = -1f; // Face left
         }
+
+        transform.localScale = localScale;
         PlayWalkSound();
     }
 
@@ -57,8 +68,16 @@ public class Move : MonoBehaviour
         _onGround = _ground.GetOnGround();
         _velocity = _body.velocity;
 
-        _acceleration = _onGround ? _maxAcceleation : _maxAirAcceleration;
-        _maxSpeedChange = _acceleration * Time.deltaTime;
+        if (_onGround)
+        {
+            _acceleration = _maxAcceleation;
+        }
+        else
+        {
+            _acceleration = _maxAirAcceleration;
+            _maxSpeedChange = _acceleration * Time.deltaTime;
+        }
+
         _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
 
         _body.velocity = _velocity;
@@ -68,40 +87,36 @@ public class Move : MonoBehaviour
 
     private void PlayWalkSound()
     {
-
-        if (_onGround && Mathf.Abs(_velocity.x) > 0.1f && !_walkAudioSource.isPlaying)
+        // Check if the player is moving and on the ground
+        if (_onGround && Mathf.Abs(_velocity.x) > 0.1f)
         {
-            _walkAudioSource.clip = _walkSound;
-            _walkAudioSource.loop = true;
-            _walkAudioSource.Play();
-        }
-        else if ((_onGround && Mathf.Abs(_velocity.x) < 0.1f) || !_onGround)
-        {
-            if (_walkAudioSource.isPlaying)
+            if (!_isPlayingWalkSound)
             {
-                _walkAudioSource.Stop();
-            }
-        }
-    }
-
-    private void UpdateAnimator()
-    {
-        // Update the animation state based on player's ground status and velocity
-        if (_onGround)
-        {
-            if (_velocity.x != 0)
-            {
-                _animator.SetInteger("playerState", 1); // Running state
-            }
-            else
-            {
-                _animator.SetInteger("playerState", 0); // Idle state
+                _walkAudioSource.clip = _walkSound;
+                _walkAudioSource.loop = true;
+                _walkAudioSource.Play();
+                _isPlayingWalkSound = true;
             }
         }
         else
         {
-            // If in air, set jump animation
-            _animator.SetInteger("playerState", 2); // Jump state
+            if (_isPlayingWalkSound)
+            {
+                _walkAudioSource.Stop();
+                _isPlayingWalkSound = false;
+            }
+        }
+    }
+
+
+
+    private void UpdateAnimator()
+    {
+        int animationState = _onGround ? (_velocity.x != 0 ? ANIMATION_STATE_RUNNING : ANIMATION_STATE_IDLE) : ANIMATION_STATE_JUMPING;
+
+        if (_animator.GetInteger("playerState") != animationState)
+        {
+            _animator.SetInteger("playerState", animationState);
         }
     }
 }

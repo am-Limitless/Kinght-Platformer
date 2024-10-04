@@ -3,12 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject WinPannel;
+    public GameObject winPannel;
 
     public WinTrigger winTriggerScript;
-
-
-
 
     public void Quit()
     {
@@ -17,15 +14,30 @@ public class GameManager : MonoBehaviour
 
     public void WinMenu()
     {
-        WinPannel.SetActive(true);
+        winPannel.SetActive(true);
     }
 
-    public void NextLevel()
+    public void LoadNextLevel()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        int nextSceneIndex = currentScene.buildIndex + 1;
+        int nextSceneIndex = GetNextSceneIndex(currentSceneIndex);
 
         SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    private int GetNextSceneIndex(int currentSceneIndex)
+    {
+        const int maxSceneIndex = 5; 
+
+        if (currentSceneIndex < maxSceneIndex)
+        {
+            return currentSceneIndex + 1;
+        }
+        else
+        {
+            Debug.LogError("No next scene available");
+            return -1; 
+        }
     }
 }

@@ -4,17 +4,15 @@ using UnityEngine;
 public class Obstacles : MonoBehaviour
 {
     private Vector2 startPos;
-    private Rigidbody2D rb;
-    private Animator _animator;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator _animator;
 
-    [SerializeField] private AudioClip _gameOverSound;
     [SerializeField] private AudioSource _gameOverSoundSource;
+    [SerializeField] private AudioClip _gameOverSound;
 
     private void Start()
     {
         startPos = transform.position;
-        rb = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -22,14 +20,9 @@ public class Obstacles : MonoBehaviour
         if (collision.CompareTag("Obstacle"))
         {
             _animator.SetInteger("playerState", 3);
-            Die();
+            StartCoroutine(Respawn(0.8f));
             PlayGameOverSound();
         }
-    }
-
-    private void Die()
-    {
-        StartCoroutine(Respawn(0.8f));
     }
 
     IEnumerator Respawn(float duration)
