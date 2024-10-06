@@ -7,6 +7,19 @@ public class GameManager : MonoBehaviour
 
     public WinTrigger winTriggerScript;
 
+    private void Start()
+    {
+        //DontDestroyOnLoad(winPannel);
+    }
+
+    private void Update()
+    {
+        if (winTriggerScript.winTrigger)
+        {
+            WinMenu();
+        }
+    }
+
     public void Quit()
     {
         Application.Quit();
@@ -14,21 +27,29 @@ public class GameManager : MonoBehaviour
 
     public void WinMenu()
     {
-        winPannel.SetActive(true);
+        if (winPannel != null)
+        {
+            winPannel.SetActive(true);
+        }
     }
 
     public void LoadNextLevel()
     {
+        Debug.Log("Button Pressed");
+
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
         int nextSceneIndex = GetNextSceneIndex(currentSceneIndex);
 
-        SceneManager.LoadScene(nextSceneIndex);
+        if (nextSceneIndex != -1)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
     }
 
     private int GetNextSceneIndex(int currentSceneIndex)
     {
-        const int maxSceneIndex = 5; 
+        const int maxSceneIndex = 5;
 
         if (currentSceneIndex < maxSceneIndex)
         {
@@ -37,7 +58,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("No next scene available");
-            return -1; 
+            return -1;
         }
     }
 }

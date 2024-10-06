@@ -10,7 +10,10 @@ public class WinTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            instruct.SetActive(true);
+            if (instruct != null)
+            {
+                instruct.SetActive(true);
+            }
             winTrigger = true;
         }
     }
@@ -19,7 +22,20 @@ public class WinTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            instruct.SetActive(false);
+            if (instruct != null)
+            {
+                instruct.SetActive(false);
+            }
         }
+    }
+
+    private void OnDestroy()
+    {
+        instruct = null;   // Prevent accessing instruct after it is destroyed
+    }
+
+    private void OnDisable()
+    {
+        instruct = null;  // Prevent accessing instruct after this script is disabled
     }
 }
