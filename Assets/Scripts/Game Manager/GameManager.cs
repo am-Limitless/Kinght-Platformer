@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,16 +8,15 @@ public class GameManager : MonoBehaviour
 
     public WinTrigger winTriggerScript;
 
-    private void Start()
-    {
-        //DontDestroyOnLoad(winPannel);
-    }
+    [SerializeField] private float DelayTimer;
+
+
 
     private void Update()
     {
         if (winTriggerScript.winTrigger)
         {
-            WinMenu();
+            StartCoroutine(WinMenuTimer());
         }
     }
 
@@ -59,6 +59,16 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("No next scene available");
             return -1;
+        }
+    }
+
+    IEnumerator WinMenuTimer()
+    {
+        yield return new WaitForSeconds(DelayTimer);
+
+        if (winPannel != null)
+        {
+            winPannel.SetActive(true);
         }
     }
 }
