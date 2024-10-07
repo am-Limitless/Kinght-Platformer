@@ -10,10 +10,10 @@ public class PlayerLifeManager : MonoBehaviour
     public TextMeshProUGUI livesText;
 
     private Rigidbody2D playerRb;
-    [SerializeField] private GameObject player;
+    //[SerializeField] private GameObject player;
 
-    private Vector2 StartPos;
-    public static PlayerLifeManager Instance { get; private set; }
+    private Vector2 startPos;
+    private static PlayerLifeManager Instance;
     private WaitForSeconds _respawnDelay;
 
     private float _collisionCooldown = 0.5f;
@@ -34,8 +34,9 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void Start()
     {
-        playerRb = player.GetComponent<Rigidbody2D>();
-        StartPos = player.transform.position;
+
+        playerRb = GetComponent<Rigidbody2D>();
+        startPos = transform.position;
 
         _respawnDelay = new WaitForSeconds(0.8f);
 
@@ -48,19 +49,19 @@ public class PlayerLifeManager : MonoBehaviour
             currentLives = PlayerPrefs.GetInt("CurrentLives", initialLives);
         }
 
-        UpdateLivesUI();
-
         if (livesText == null)
         {
             livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
         }
+
+        UpdateLivesUI();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void SetStartPos(Vector2 startPos)
     {
-        this.StartPos = startPos;
+        this.startPos = startPos;
     }
 
     private void OnDestroy()
@@ -70,23 +71,19 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
         if (livesText == null)
         {
             livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
         }
-
         UpdateLivesUI();
+        playerRb = GetComponent<Rigidbody2D>();
+        startPos = transform.position;
 
-        player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            playerRb = player.GetComponent<Rigidbody2D>();
-            StartPos = player.transform.position;
+        RespawnPlayerAtStartPosition();
 
-            RespawnPlayerAtStartPosition();
+        StartCoroutine(Respawn());
 
-            StartCoroutine(Respawn());
-        }
     }
 
     public void LoseLife()
@@ -153,8 +150,8 @@ public class PlayerLifeManager : MonoBehaviour
     {
         Debug.Log("Respawn coroutine started");
         playerRb.velocity = Vector2.zero;
-        player.transform.position = StartPos;
-        player.transform.localScale = Vector2.zero;
+        transform.position = startPos;
+        transform.localScale = Vector2.zero;
 
         yield return _respawnDelay;
 
@@ -163,13 +160,9 @@ public class PlayerLifeManager : MonoBehaviour
 
     public void RespawnPlayerAtStartPosition()
     {
-        if (player != null)
-        {
-            player.transform.position = StartPos;
-            playerRb.simulated = true;
-            player.transform.localScale = Vector2.one;
-
-        }
+        transform.position = startPos;
+        playerRb.simulated = true;
+        transform.localScale = Vector2.one;
     }
 
     public void TransferLivesToNextScene()

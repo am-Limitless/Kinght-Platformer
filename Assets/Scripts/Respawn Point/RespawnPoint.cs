@@ -6,6 +6,6 @@ public class RespawnPoint : MonoBehaviour
 
     private void Start()
     {
-        PlayerLifeManager.Instance.SetStartPos(respawnPosition);
+        //PlayerLifeManager.Instance.SetStartPos(respawnPosition);
     }
 }
