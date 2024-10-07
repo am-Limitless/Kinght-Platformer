@@ -6,6 +6,10 @@ public class WinTrigger : MonoBehaviour
 
     public bool winTrigger = false;
 
+    public AudioSource WinMusicSource;
+    public AudioClip WinMusic;
+    private bool hasWon = false;
+
     private Animator animator;
 
     private void Start()
@@ -15,7 +19,7 @@ public class WinTrigger : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !hasWon)
         {
             if (instruct != null)
             {
@@ -23,6 +27,8 @@ public class WinTrigger : MonoBehaviour
             }
             winTrigger = true;
             animator.SetTrigger("playerToched");
+            WinMusicSource.PlayOneShot(WinMusic);
+            hasWon = true;
         }
     }
 
