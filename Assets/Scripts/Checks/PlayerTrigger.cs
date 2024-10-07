@@ -9,6 +9,7 @@ public class PlayerTrigger : MonoBehaviour
     public bool playerDead = false;
     public AudioSource gameOverSoundSource;
     public AudioClip gameOverSound;
+    public AudioClip lifeCollectSound;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class PlayerTrigger : MonoBehaviour
         {
             Destroy(collision.gameObject); // Remove the heart from the scene
             lifeManager.GainLife();
+            CollectLifeSound();
         }
     }
 
@@ -45,5 +47,10 @@ public class PlayerTrigger : MonoBehaviour
         {
             gameOverSoundSource.PlayOneShot(gameOverSound);
         }
+    }
+
+    private void CollectLifeSound()
+    {
+        gameOverSoundSource.PlayOneShot(lifeCollectSound);
     }
 }

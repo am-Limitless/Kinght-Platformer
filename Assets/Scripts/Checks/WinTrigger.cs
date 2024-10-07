@@ -6,6 +6,13 @@ public class WinTrigger : MonoBehaviour
 
     public bool winTrigger = false;
 
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -15,6 +22,7 @@ public class WinTrigger : MonoBehaviour
                 instruct.SetActive(true);
             }
             winTrigger = true;
+            animator.SetTrigger("playerToched");
         }
     }
 
