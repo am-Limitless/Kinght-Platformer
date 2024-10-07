@@ -33,8 +33,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadNextLevel()
     {
-        Debug.Log("Button Pressed");
-
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
         int nextSceneIndex = GetNextSceneIndex(currentSceneIndex);
