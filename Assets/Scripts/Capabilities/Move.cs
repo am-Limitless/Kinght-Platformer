@@ -25,6 +25,7 @@ public class Move : MonoBehaviour
     private float _acceleration;
     private bool _onGround;
     private bool _isPlayingWalkSound;
+    private bool isMovementEnabled = true;
 
     private const int ANIMATION_STATE_IDLE = 0;
     private const int ANIMATION_STATE_RUNNING = 1;
@@ -42,47 +43,67 @@ public class Move : MonoBehaviour
 
     private void Update()
     {
-        _direction.x = _input.RetrieveMoveInput();
-        _desiredVelocity = new Vector2(_direction.x, 0f) * _maxSpeed;
-
-        Vector3 localScale = transform.localScale;
-
-        // Flip character based on direction
-        if (_direction.x > 0)
+        if (isMovementEnabled)
         {
-            // Move right
-            localScale.x = 1f; // Face right
-        }
-        else if (_direction.x < 0)
-        {
-            // Move left
-            localScale.x = -1f; // Face left
-        }
+            _direction.x = _input.RetrieveMoveInput();
 
-        transform.localScale = localScale;
-        PlayWalkSound();
+            _desiredVelocity = new Vector2(_direction.x, 0f) * _maxSpeed;
+
+            Vector3 localScale = transform.localScale;
+
+            // Flip character based on direction
+            if (_direction.x > 0)
+            {
+                // Move right
+                localScale.x = 1f; // Face right
+            }
+            else if (_direction.x < 0)
+            {
+                // Move left
+                localScale.x = -1f; // Face left
+            }
+
+            transform.localScale = localScale;
+            PlayWalkSound();
+        }
     }
 
     private void FixedUpdate()
     {
-        _onGround = _ground.GetOnGround();
-        _velocity = _body.velocity;
-
-        if (_onGround)
+        if (isMovementEnabled)
         {
-            _acceleration = _maxAcceleation;
+            _onGround = _ground.GetOnGround();
+            _velocity = _body.velocity;
+
+            if (_onGround)
+            {
+                _acceleration = _maxAcceleation;
+            }
+            else
+            {
+                _acceleration = _maxAirAcceleration;
+                _maxSpeedChange = _acceleration * Time.deltaTime;
+            }
+
+            _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
+
+            _body.velocity = _velocity;
+
+            UpdateAnimator();
         }
-        else
-        {
-            _acceleration = _maxAirAcceleration;
-            _maxSpeedChange = _acceleration * Time.deltaTime;
-        }
+    }
 
-        _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
+    public void EnableMovement()
+    {
+        isMovementEnabled = true;
+    }
 
-        _body.velocity = _velocity;
-
-        UpdateAnimator();
+    public void DisableMovement()
+    {
+        isMovementEnabled = false;
+        _body.velocity = Vector2.zero;
+        _animator.SetInteger("playerState", ANIMATION_STATE_IDLE);
+        _walkAudioSource.Stop();
     }
 
     private void PlayWalkSound()
@@ -117,6 +138,15 @@ public class Move : MonoBehaviour
         if (_animator.GetInteger("playerState") != animationState)
         {
             _animator.SetInteger("playerState", animationState);
+        }
+
+        if (animationState == ANIMATION_STATE_IDLE)
+        {
+            if (_isPlayingWalkSound)
+            {
+                _walkAudioSource.Stop();
+                _isPlayingWalkSound = false;
+            }
         }
     }
 }

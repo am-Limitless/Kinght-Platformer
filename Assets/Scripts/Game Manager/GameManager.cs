@@ -10,27 +10,25 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private float DelayTimer;
 
+    private Move moveScript;
 
+    private void Start()
+    {
+        moveScript = GameObject.FindObjectOfType<Move>();
+    }
 
     private void Update()
     {
         if (winTriggerScript.winTrigger)
         {
             StartCoroutine(WinMenuTimer());
+            moveScript.DisableMovement();
         }
     }
 
     public void Quit()
     {
         Application.Quit();
-    }
-
-    public void WinMenu()
-    {
-        if (winPannel != null)
-        {
-            winPannel.SetActive(true);
-        }
     }
 
     public void LoadNextLevel()
@@ -44,6 +42,7 @@ public class GameManager : MonoBehaviour
         if (nextSceneIndex != -1)
         {
             SceneManager.LoadScene(nextSceneIndex);
+            moveScript.EnableMovement();
         }
     }
 
