@@ -19,6 +19,7 @@ public class PlayerLifeManager : MonoBehaviour
     private float _collisionCooldown = 0.5f;
     private bool _isOnCooldown = false;
 
+    public LevelLoader levelLoader;
     private void Awake()
     {
         if (Instance == null)
@@ -40,7 +41,7 @@ public class PlayerLifeManager : MonoBehaviour
 
         _respawnDelay = new WaitForSeconds(0.8f);
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             currentLives = initialLives;
         }
@@ -53,6 +54,11 @@ public class PlayerLifeManager : MonoBehaviour
         {
             livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
         }
+        if (levelLoader == null)
+        {
+            levelLoader = FindObjectOfType<LevelLoader>(); // Find the LevelLoader script in the scene
+        }
+
 
         UpdateLivesUI();
 
@@ -142,8 +148,14 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("Game Over!");
-        SceneManager.LoadScene("GameOver");
+        if (levelLoader != null)
+        {
+            levelLoader.LoadLevelString("GameOver"); // Use LevelLoader to display loading UI
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOver");
+        }
     }
 
     public IEnumerator Respawn()
@@ -168,7 +180,17 @@ public class PlayerLifeManager : MonoBehaviour
     public void TransferLivesToNextScene()
     {
         PlayerPrefs.SetInt("CurrentLives", currentLives);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        if (levelLoader != null)
+        {
+            // Use LevelLoader to transition to the next scene using the scene index
+            levelLoader.LoadLevelInt(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
         UpdateLivesUI();
     }
 
