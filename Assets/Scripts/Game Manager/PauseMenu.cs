@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
     private bool isPaused = false;
+
+    public GameObject player;
 
     private void Update()
     {
@@ -40,7 +43,19 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
+        Time.timeScale = 1f;
         Application.Quit();
+    }
+
+    public void MenuLoad()
+    {
+        Time.timeScale = 1f;
+        // Destroy player object if exists to avoid it appearing in the main menu
+        if (player != null)
+        {
+            Destroy(player);
+        }
+        SceneManager.LoadScene("MainMenu");
     }
 }
 

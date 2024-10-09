@@ -9961,7 +9961,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 72e8962db63a09143a3939c930367db2, type: 3}
-  m_Color: {r: 0, g: 0.69596577, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -10470,6 +10470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialLives: 3
   livesText: {fileID: 0}
+  levelLoader: {fileID: 0}
 --- !u!1 &7416958109085537591
 GameObject:
   m_ObjectHideFlags: 0
