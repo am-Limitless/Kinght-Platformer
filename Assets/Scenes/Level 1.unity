@@ -2453,6 +2453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winPannel: {fileID: 276096151}
+  GameUI: {fileID: 7643047073479097539}
   winTriggerScript: {fileID: 2094104052}
   DelayTimer: 3
 --- !u!114 &753666856 stripped
@@ -14667,7 +14668,7 @@ Transform:
   m_GameObject: {fileID: 993753298}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.378696, y: -1.9050369, z: -10}
+  m_LocalPosition: {x: -18.382719, y: -1.9050369, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16264,7 +16265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8369786486127393335, guid: 6bdf5bbe2cf66b64399a6aae8fea1aea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.378696
+      value: -18.382719
       objectReference: {fileID: 0}
     - target: {fileID: 8369786486127393335, guid: 6bdf5bbe2cf66b64399a6aae8fea1aea, type: 3}
       propertyPath: m_LocalPosition.y
@@ -17056,6 +17057,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fba05ed73c0bd445a07bb8aa0999155, type: 3}
+--- !u!1 &7643047073479097539 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 115622335177428803, guid: 6fba05ed73c0bd445a07bb8aa0999155, type: 3}
+  m_PrefabInstance: {fileID: 7643047073479097538}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9017578916436938640
 PrefabInstance:
   m_ObjectHideFlags: 0

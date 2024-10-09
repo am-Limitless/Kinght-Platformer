@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject winPannel;
 
+    public GameObject GameUI;
+
     public WinTrigger winTriggerScript;
 
     [SerializeField] private float DelayTimer;
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         if (winTriggerScript.winTrigger)
         {
+            Debug.Log("Win Trigger Activated in GameManager.");
             StartCoroutine(WinMenuTimer());
             moveScript.DisableMovement();
         }
@@ -46,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private int GetNextSceneIndex(int currentSceneIndex)
     {
-        const int maxSceneIndex = 5;
+        const int maxSceneIndex = 20;
 
         if (currentSceneIndex < maxSceneIndex)
         {
@@ -61,11 +64,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator WinMenuTimer()
     {
+        Debug.Log("Starting WinMenuTimer Coroutine.");
         yield return new WaitForSeconds(DelayTimer);
 
         if (winPannel != null)
         {
+            GameUI.SetActive(false);
             winPannel.SetActive(true);
+            Debug.Log("Win Panel activated.");
         }
     }
 }

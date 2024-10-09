@@ -26,6 +26,7 @@ public class WinTrigger : MonoBehaviour
                 instruct.SetActive(true);
             }
             winTrigger = true;
+            Debug.Log("Player has triggered the win condition!");
             animator.SetTrigger("playerToched");
             WinMusicSource.PlayOneShot(WinMusic);
             hasWon = true;

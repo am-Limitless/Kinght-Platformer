@@ -33,7 +33,10 @@ public class Jump : MonoBehaviour
 
     private bool _desiredJump;
     private bool _onGround;
+#pragma warning disable CS0414 // Suppress the warning for unused private fields
     private bool _isJumping;
+#pragma warning restore CS0414
+
 
     private void Start()
     {
