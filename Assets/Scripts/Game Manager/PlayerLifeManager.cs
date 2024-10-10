@@ -35,7 +35,11 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void Start()
     {
+        InitializePlayer();
+    }
 
+    private void InitializePlayer()
+    {
         playerRb = GetComponent<Rigidbody2D>();
         startPos = transform.position;
 
@@ -77,6 +81,11 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "MainMenu")
+        {
+            Destroy(gameObject); // Remove the player object when going to the main menu
+            return;
+        }
 
         if (livesText == null)
         {
@@ -191,6 +200,13 @@ public class PlayerLifeManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
+        UpdateLivesUI();
+    }
+
+    public void ResetPlayerLives()
+    {
+        currentLives = initialLives;
+        PlayerPrefs.SetInt("CurrentLives", currentLives);
         UpdateLivesUI();
     }
 
