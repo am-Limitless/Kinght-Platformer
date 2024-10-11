@@ -41,11 +41,18 @@ public class Move : MonoBehaviour
         _maxSpeedChange = _maxAcceleation * Time.deltaTime;
     }
 
+    private void Start()
+    {
+        EnableMovement();
+    }
+
     private void Update()
     {
         if (isMovementEnabled)
         {
             _direction.x = _input.RetrieveMoveInput();
+
+            Debug.Log("Move input: " + _direction.x);
 
             _desiredVelocity = new Vector2(_direction.x, 0f) * _maxSpeed;
 
@@ -66,6 +73,10 @@ public class Move : MonoBehaviour
             transform.localScale = localScale;
             PlayWalkSound();
         }
+        else
+        {
+            Debug.Log("Movement is disabled.");
+        }
     }
 
     private void FixedUpdate()
@@ -75,6 +86,7 @@ public class Move : MonoBehaviour
             _onGround = _ground.GetOnGround();
             _velocity = _body.velocity;
 
+            _maxSpeedChange = _acceleration * Time.deltaTime;
             if (_onGround)
             {
                 _acceleration = _maxAcceleation;
@@ -82,7 +94,7 @@ public class Move : MonoBehaviour
             else
             {
                 _acceleration = _maxAirAcceleration;
-                _maxSpeedChange = _acceleration * Time.deltaTime;
+                //_maxSpeedChange = _acceleration * Time.deltaTime;
             }
 
             _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
@@ -95,11 +107,13 @@ public class Move : MonoBehaviour
 
     public void EnableMovement()
     {
+        Debug.Log("EnableMovement called. Movement is enabled.");
         isMovementEnabled = true;
     }
 
     public void DisableMovement()
     {
+        Debug.Log("DisableMovement called. Movement is disabled.");
         isMovementEnabled = false;
         _body.velocity = Vector2.zero;
         _animator.SetInteger("playerState", ANIMATION_STATE_IDLE);

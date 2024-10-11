@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -20,6 +21,13 @@ public class PlayerLifeManager : MonoBehaviour
     private bool _isOnCooldown = false;
 
     public LevelLoader levelLoader;
+
+    private Move move;
+
+    public Transform startPosition;
+
+    private CinemachineVirtualCamera _cinemachineCamera;
+
     private void Awake()
     {
         if (Instance == null)
@@ -40,17 +48,20 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void InitializePlayer()
     {
-        playerRb = GetComponent<Rigidbody2D>();
-        startPos = transform.position;
+        move = GetComponent<Move>();
 
+        playerRb = GetComponent<Rigidbody2D>();
+        //startPos = transform.position;
         _respawnDelay = new WaitForSeconds(0.8f);
 
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        // Initialize lives correctly
+        if (SceneManager.GetActiveScene().buildIndex == 1) // First level
         {
             currentLives = initialLives;
         }
         else
         {
+            // Load current lives for subsequent levels
             currentLives = PlayerPrefs.GetInt("CurrentLives", initialLives);
         }
 
@@ -60,18 +71,17 @@ public class PlayerLifeManager : MonoBehaviour
         }
         if (levelLoader == null)
         {
-            levelLoader = FindObjectOfType<LevelLoader>(); // Find the LevelLoader script in the scene
+            levelLoader = FindObjectOfType<LevelLoader>();
         }
 
-
         UpdateLivesUI();
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void SetStartPos(Vector2 startPos)
+    public void SetStartPos(Vector2 newPos)
     {
-        this.startPos = startPos;
+        startPos = newPos;
+        RespawnPlayerAtStartPosition();
     }
 
     private void OnDestroy()
@@ -81,24 +91,60 @@ public class PlayerLifeManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Scene loaded: " + scene.name);
+
         if (scene.name == "MainMenu")
         {
             Destroy(gameObject); // Remove the player object when going to the main menu
             return;
         }
 
+        SetStartPosition();
+
         if (livesText == null)
         {
             livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
         }
         UpdateLivesUI();
-        playerRb = GetComponent<Rigidbody2D>();
-        startPos = transform.position;
 
         RespawnPlayerAtStartPosition();
 
-        StartCoroutine(Respawn());
+        FindAndAssignCinemachineCamera();
 
+        move.EnableMovement();
+
+    }
+
+    private void FindAndAssignCinemachineCamera()
+    {
+        // Find the CinemachineVirtualCamera in the scene
+        _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        if (_cinemachineCamera != null)
+        {
+            // Set the player's transform as the follow target
+            _cinemachineCamera.Follow = transform;
+        }
+        else
+        {
+            Debug.LogWarning("Cinemachine Camera not found in the scene.");
+        }
+    }
+
+
+    private void SetStartPosition()
+    {
+        // Find and set the start position from the "StartPosition" GameObject in the scene
+        GameObject startObject = GameObject.Find("StartPosition");
+        if (startObject != null)
+        {
+            startPosition = startObject.transform;
+            startPos = startPosition.position;  // Update the start position
+        }
+        else
+        {
+            Debug.LogWarning("StartPosition GameObject not found. Using the current position.");
+            startPos = transform.position;  // Fall back to current position
+        }
     }
 
     public void LoseLife()
@@ -176,8 +222,14 @@ public class PlayerLifeManager : MonoBehaviour
 
         yield return _respawnDelay;
 
+        SetStartPosition();
+
         RespawnPlayerAtStartPosition();
+
+        FindObjectOfType<Move>().EnableMovement();
     }
+
+
 
     public void RespawnPlayerAtStartPosition()
     {
