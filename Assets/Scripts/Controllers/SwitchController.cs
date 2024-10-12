@@ -38,6 +38,8 @@ public class SwitchController : MonoBehaviour
             if (door.isOpen)
             {
                 door.CloseDoor();
+                doorSoundSource.Play();
+                animator.SetTrigger("switch OFF");
             }
             else
             {
