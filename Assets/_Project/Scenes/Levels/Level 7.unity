@@ -386,7 +386,7 @@ MonoBehaviour:
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
-  m_StreamingVersion: 0
+  m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
     TrackingTarget: {fileID: 676584948}
@@ -37008,9 +37008,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.1
+  far clip plane: 5000
+  field of view: 40
   orthographic: 1
   orthographic size: 8.237525
   m_Depth: -1
@@ -37037,7 +37037,7 @@ Transform:
   m_GameObject: {fileID: 993753298}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -75.35297, y: -7.0660357, z: -10}
+  m_LocalPosition: {x: -76.7, y: -7.457, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -39310,21 +39310,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1326473377}
     m_Modifications:
-    - target: {fileID: 561213742163093598, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.001
-      objectReference: {fileID: 0}
-    - target: {fileID: 561213742163093598, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.063
-      objectReference: {fileID: 0}
     - target: {fileID: 561418803838757999, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
       propertyPath: m_Name
       value: Rock Trap
-      objectReference: {fileID: 0}
-    - target: {fileID: 561418803838757999, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2791119349769096604, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39365,22 +39353,6 @@ PrefabInstance:
     - target: {fileID: 2791119349769096604, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8027828545936608894, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8027828545936608894, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8508293706986843784, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.003
-      objectReference: {fileID: 0}
-    - target: {fileID: 8508293706986843784, guid: 931b5be814f7863439c4c6b9b244bf3a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.238
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
